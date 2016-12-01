@@ -16,14 +16,14 @@ app = Flask(__name__)
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse(os.environ["postgres://mumspcihucbpgc:qyCb-fkcxCAu25CKCcvqfgPQI2@ec2-54-217-214-51.eu-west-1.compute.amazonaws.com:5432/dble4c6c3gvjsu"])
 
-if (
+if 
 conn = psycopg2.connect(
     database=url.path[1:],
     user=url.username,
     password=url.password,
     host=url.hostname,
     port=url.port
-)):
+):
     ok=1
 else:
     ok=0
@@ -63,7 +63,7 @@ def makeWebhookResult(req):
     #users = json.dumps(results)
 
 
-    users = {'Florian':ok, 'Emna':'Bouzouita', 'Alex':'Guilngar'}
+    users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
     speech = "The name of " + surname + " is " + str(users[surname]) + "."
 
