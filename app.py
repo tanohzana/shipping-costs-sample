@@ -32,7 +32,7 @@ def makeWebhookResult(req):
         return {}
     result = req.get("result")
     parameters = result.get("parameters")
-    surname = parameters.get("surname")
+    surname = parameters.get("names")
 
     users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
@@ -46,7 +46,7 @@ def makeWebhookResult(req):
         "displayText": speech,
         #"data": {},
         # "contextOut": [],
-        "source": "find-name11111"
+        "source": "apiai-onlinestore-shipping"
     }
 
 
