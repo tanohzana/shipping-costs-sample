@@ -34,7 +34,7 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     surname = parameters.get("names")
 
-    users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
+    users = {'Florian':'Adonis22', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
     speech = "The name of " + surname + " is " + str(users[surname]) + "."
 
