@@ -3,7 +3,8 @@
 import urllib
 import json
 import os
-import MySQLdb
+import psycopg2
+import urlparse
 
 from flask import Flask
 from flask import request
@@ -12,7 +13,16 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-db=_mysql.connect(host="localhost", user="root", passwd="root", db="test_database")
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["postgres://mumspcihucbpgc:qyCb-fkcxCAu25CKCcvqfgPQI2@ec2-54-217-214-51.eu-west-1.compute.amazonaws.com:5432/dble4c6c3gvjsu"])
+
+conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -29,11 +39,11 @@ def webhook():
     r.headers['Content-Type'] = 'application/json'
     return r
 
-def dictfetchall(cursor):
-    """Returns all rows from a cursor as a list of dicts"""
-    desc = cursor.description
-    return [dict(itertools.izip([col[0] for col in desc], row)) 
-            for row in cursor.fetchall()]
+#def dictfetchall(cursor):
+    #"""Returns all rows from a cursor as a list of dicts"""
+    #desc = cursor.description
+    #return [dict(itertools.izip([col[0] for col in desc], row)) 
+    #        for row in cursor.fetchall()]
 
 def makeWebhookResult(req):
     if req.get("result").get("action") != "find.name":
@@ -42,15 +52,16 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     surname = parameters.get("names")
 
-    c=db.cursor()
-    c.execute("""SELECT * FROM users""")
+    #c=db.cursor()
+    #c.execute("""SELECT * FROM users""")
 
-    results = dictfetchall(c)
-    users = json.dumps(results)
+    #results = dictfetchall(c)
+    #users = json.dumps(results)
 
-    #users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
-    speech = "The age of " + surname + " is " + str(users[0][surname]) + "."
+    users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
+
+    speech = "The name of " + surname + " is " + str(users[surname]) + "."
 
     print("Response:")
     print(speech)
@@ -62,6 +73,7 @@ def makeWebhookResult(req):
         #"data": {},
         # "contextOut": [],
         "source": "apiai-onlinestore-shipping"
+        "database": conn
     }
 
 
