@@ -3,6 +3,7 @@
 import urllib
 import json
 import os
+import MySQLdb
 
 from flask import Flask
 from flask import request
@@ -11,6 +12,7 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
+db=_mysql.connect(host="localhost", user="root", passwd="root", db="test_database")
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -27,6 +29,12 @@ def webhook():
     r.headers['Content-Type'] = 'application/json'
     return r
 
+def dictfetchall(cursor):
+    """Returns all rows from a cursor as a list of dicts"""
+    desc = cursor.description
+    return [dict(itertools.izip([col[0] for col in desc], row)) 
+            for row in cursor.fetchall()]
+
 def makeWebhookResult(req):
     if req.get("result").get("action") != "find.name":
         return {}
@@ -34,12 +42,19 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     surname = parameters.get("names")
 
-    users = {'Florian':'Adonis22', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
+    c=db.cursor()
+    c.execute("""SELECT * FROM users""")
+
+    results = dictfetchall(c)
+    users = json.dumps(results)
+
+    #users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
     speech = "The name of " + surname + " is " + str(users[surname]) + "."
 
     print("Response:")
-    print(speech)
+    #print(speech)
+    print(users)
 
     return {
         "speech": speech,
