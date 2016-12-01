@@ -50,15 +50,15 @@ def makeWebhookResult(req):
 
     #users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
-    speech = "The name of " + surname + " is " + str(users[surname]) + "."
+    speech = "The age of " + surname + " is " + str(users[0][surname]) + "."
 
     print("Response:")
-    #print(speech)
-    print(users)
+    print(speech)
+    #print(users)
 
     return {
-        "speech": users,
-        "displayText": users,
+        "speech": speech,
+        "displayText": speech,
         #"data": {},
         # "contextOut": [],
         "source": "apiai-onlinestore-shipping"
