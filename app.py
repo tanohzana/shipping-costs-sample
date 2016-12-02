@@ -44,17 +44,9 @@ def makeWebhookResult(req):
     parameters = result.get("parameters")
     surname = parameters.get("names")
 
-    #c=db.cursor()
-    #c.execute("""SELECT * FROM users""")
+    users = {'Florian':'Adonis', 'Emna':'Bouzouita', 'Alex':'Guilngar'}
 
-    #results = dictfetchall(c)
-    #users = json.dumps(results)
-
-    users = ['Florian', 'Adonis', '21']
-
-    speech = "The name of " + surname + " is " + str(users[1]) + " and the age of " + surname +  " is " + str(users[2]) + "."
-
-
+    speech = "The name of " + surname + " is " + str(users[surname]) + "."
     print("Response:")
     print(speech)
     #print(users)
